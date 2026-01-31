@@ -14,7 +14,7 @@ Minimalne komponenty do ESPHome:
 ```md
 ## Użycie (ESPHome)
 
-```yaml
+```
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
     components: [wmbus_common, wmbus_radio]
