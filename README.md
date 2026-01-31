@@ -11,6 +11,7 @@ Minimalne komponenty do ESPHome:
 - `frame->as_hex()` = **NORM**: T1 po 3of6 decode, C1 po ucięciu 2B suffix, DLL CRC sprawdzone i zdjęte (A/B). Jeśli CRC nie pasuje → ramka jest odrzucana.
 - `frame->as_hex_raw()` = **RAW** bajty z radia (przed normalizacją).
 
+```md
 ## Użycie (ESPHome)
 
 ```yaml
