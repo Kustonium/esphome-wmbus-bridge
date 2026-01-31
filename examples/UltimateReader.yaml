@@ -18,11 +18,11 @@ logger:
   level: info                  # Zmień na 'warn' jeśli chcesz ciszej w logach
   logs:
     mqtt: warn                 # Ucisza MQTT (zostawia warningi)
-    component: error           # Ucisza ogólne gadanie ESPHome
-    # wmbus: info              # (opcjonalnie) wymuś logi wmbus, jeśli kiedyś znikną
+    component: warn           # Ucisza ogólne gadanie ESPHome
+    #wmbus: info              # (opcjonalnie) wymuś logi wmbus, jeśli kiedyś znikną
 
 mdns:
-  disabled: true               # Wyłączone mDNS = mniej usług/gniazd/szumu
+  disabled: false               # Wyłączone mDNS = mniej usług/gniazd/szumu => daj true jak się nie kompiluje 
 
 ota:
   - platform: esphome
@@ -72,22 +72,13 @@ wmbus_radio:
       - if:
           condition:
             lambda: |-
-              // FILTR: to odrzuca krótkie śmieci.
-              // Opcja lżejsza (polecana): return frame->size() >= 15;
-              // (15 bajtów = 30 znaków hex)
               return frame->as_hex().size() >= 30;
           then:
-            # === MIGANIE LED (usuń te 3 linie jeśli nie chcesz migania) ===
-            - output.turn_on: status_led
-            - delay: 50ms                 # skróć np. do 10ms jeśli miga za długo
-            - output.turn_off: status_led
-
-            # === MQTT: publikacja znormalizowanej ramki w HEX ===
             - mqtt.publish:
                 topic: "wmbus_bridge/telegram"
                 payload: !lambda |-
                   return frame->as_hex();
-
-            # Jeśli chcesz RAW z radia zamiast NORM:
-            # payload: !lambda |-
-            #   return frame->as_hex_raw();
+            # === MIGANIE LED (usuń te 3 linie jeśli nie chcesz migania) ===
+            - output.turn_on: status_led
+            - delay: 50ms
+            - output.turn_off: status_led
