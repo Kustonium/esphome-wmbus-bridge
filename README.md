@@ -18,8 +18,6 @@ Wypluwasz:
 ## Użycie w ESPHome
 Zobacz `examples/UltimateReader.yaml`.
 
-W `external_components` podmień `YOUR_GH_USER` na własny user/repo.
-
 
 ## RAW vs NORM (ważne)
 - `Frame::as_hex()` zwraca **telegram znormalizowany (NORM)**:
