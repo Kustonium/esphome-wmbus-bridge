@@ -1,34 +1,24 @@
-# esphome-wmbus-bridge
+# esphome-wmbus-bridge (subset)
 
-ESP tylko odbiera wM-Bus (T1/C1) i publikuje telegramy przez MQTT. Dekodowanie jest poza ESP.
+To jest *subset* repo Szczepana: tylko `wmbus_common` + `wmbus_radio`.
+Nie ma `wmbus_meter` (dekodowania) – ESP wysyła telegramy, dekoder jest poza ESP.
 
-## Co to jest
-Minimalne komponenty do ESPHome:
-- **wmbus_radio** – odbiornik wM-Bus na **SX1276** (SPI) i trigger `on_frame`
-- **wmbus_bridge_common** – minimum do normalizacji ramek: LinkMode (T1/C1) + DLL CRC (Format A/B)
-
-## RAW vs NORM
-- `frame->as_hex()` = **NORM**: T1 po 3of6 decode, C1 po ucięciu 2B suffix, DLL CRC sprawdzone i zdjęte (A/B). Jeśli CRC nie pasuje → ramka jest odrzucana.
-- `frame->as_hex_raw()` = **RAW** bajty z radia (przed normalizacją).
-
-## Użycie (ESPHome)
+## Użycie
 
 ```yaml
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
-    components: [wmbus_bridge_common, wmbus_radio]
+    components: [wmbus_common, wmbus_radio]
     refresh: 0d
 ```
 
-Potem użyj jednego z przykładów w `examples/`.
+## Filtr ramek (ważne)
 
-## Przykłady
-- `examples/UltimateReader_strict.yaml` – filtr jak u Ciebie (`as_hex().size() >= 30`) + opcjonalny RAW
-- `examples/UltimateReader_lite.yaml` – profil oszczędny (filtr `frame->size()`), logger WARN, bez API/time/captive_portal
+- `frame->as_hex().size() >= 30` – wygodne, ale generuje HEX nawet dla śmieci.
+- `frame->size() >= 15` – to samo logicznie (30 hex = 15 bajtów), ale taniej na słabszych ESP.
 
 ## Atrybucja i licencja
-Ten projekt jest pochodną prac:
-- SzczepanLeon/esphome-components (autor: Szczepan Leon)
-- wmbusmeters/wmbusmeters (GPL)
+- SzczepanLeon/esphome-components
+- wmbusmeters/wmbusmeters
 
-Licencja tego repo: **GPL-3.0-or-later** (szczegóły w `LICENSE` i `NOTICE`).
+GPL-3.0-or-later – patrz `LICENSE` i `NOTICE`.

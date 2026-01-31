@@ -1,63 +1,15 @@
-esphome:
-  name: ultimatereader-lite
-  friendly_name: UltimateReader Lite
-  min_version: 2025.11.0
-  name_add_mac_suffix: false
-
-  project:
-    name: wmbus.UltimateReader
-    version: "5.0.1-lite"
-
-esp32:
-  board: esp32-s3-devkitc-1
-  variant: esp32s3
-  framework:
-    type: esp-idf
-
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
-    components: [wmbus_bridge_common, wmbus_radio]
+    components: [wmbus_common, wmbus_radio]
     refresh: 0d
 
-logger:
-  level: warn
-
-ota:
-  - platform: esphome
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  power_save_mode: none
-
-mqtt:
-  broker: !secret mqtt_broker
-  username: !secret mqtt_user
-  password: !secret mqtt_password
-
-spi:
-  id: spi_lora
-  clk_pin: GPIO05
-  mosi_pin: GPIO06
-  miso_pin: GPIO03
-
 wmbus_radio:
-  radio_type: SX1276
-  spi_id: spi_lora
-  cs_pin: GPIO07
-  reset_pin: GPIO08
-  irq_pin:
-    number: GPIO33
-    mode:
-      input: true
-      pullup: true
-
   on_frame:
     then:
       - if:
           condition:
             lambda: |-
-              // 30 znaków hex = 15 bajtów danych; filtr bez alokacji stringa
+              // drop short junk (30 hex chars == 15 bytes)
               return frame->size() >= 15;
           then:
             - mqtt.publish:

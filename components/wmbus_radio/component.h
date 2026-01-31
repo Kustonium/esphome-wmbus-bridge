@@ -8,7 +8,7 @@
 #include "esphome/core/gpio.h"
 
 #include "esphome/components/spi/spi.h"
-#include "esphome/components/wmbus_bridge_common/link_mode.h"
+#include "esphome/components/wmbus_common/wmbus.h"
 
 #include "packet.h"
 #include "transceiver.h"

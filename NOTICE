@@ -1,18 +1,11 @@
 Attribution / Notice
 
-This repository is an intentionally minimal RF -> MQTT bridge for wM-Bus telegrams.
-
-It is a derivative work based on:
+This repository repackages selected components from:
 - SzczepanLeon/esphome-components (author: Szczepan Leon)
 - wmbusmeters/wmbusmeters (GPL-3.0)
 
+Purpose: provide a lightweight RF->MQTT bridge using only:
+- components/wmbus_radio
+- components/wmbus_common
+
 License: GPL-3.0-or-later
-
-Copyright:
-- (c) 2026 Krzysztof_K (changes / minimalization work)
-- (c) Szczepan Leon (upstream components)
-- (c) wmbusmeters contributors (CRC/frame-related code origins)
-
-Permission note:
-Szczepan Leon explicitly confirmed (1) permission to fork & publish and (2) GPL-3.0(or-later) licensing
-in a forum/DM reply: "1 - tak, 2 - tak" (screenshot kept by repo owner).

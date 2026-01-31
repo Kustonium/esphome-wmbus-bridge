@@ -6,14 +6,11 @@
 #include <string>
 #include <vector>
 
+#include "esphome/components/wmbus_common/wmbus.h"
 #include "esphome/core/helpers.h"
-#include "esphome/components/wmbus_bridge_common/link_mode.h"
 
 namespace esphome {
 namespace wmbus_radio {
-
-using esphome::wmbus_common::LinkMode;
-
 struct Frame;
 
 struct Packet {
@@ -29,16 +26,8 @@ public:
 
   std::optional<Frame> convert_to_frame();
 
-  // (opcjonalnie) surowe bajty z radia (przed normalizacją)
-  const std::vector<uint8_t> &raw_data() const { return this->raw_data_; }
-
-
 protected:
   std::vector<uint8_t> data_;
-  std::vector<uint8_t> raw_data_;
-
-  std::vector<uint8_t> raw_data_;
-
 
   size_t expected_size();
   size_t expected_size_ = 0;
@@ -63,11 +52,6 @@ public:
 
   std::vector<uint8_t> as_raw();
   std::string as_hex();
-  std::string as_hex_raw();
-
-  size_t size() const { return this->data_.size(); }
-  size_t raw_size() const { return this->raw_data_.size(); }
-
   std::string as_rtlwmbus();
 
   void mark_as_handled();
@@ -75,13 +59,8 @@ public:
 
 protected:
   std::vector<uint8_t> data_;
-  std::vector<uint8_t> raw_data_;
-
-  std::vector<uint8_t> raw_data_;
-
   LinkMode link_mode_;
   int8_t rssi_;
-
   std::string format_;
   uint8_t handlers_count_ = 0;
 };
