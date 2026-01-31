@@ -1,0 +1,2 @@
+Jeśli chcesz mieć "książkowo" w repo, wklej pełny tekst GPLv3 do pliku LICENSE.
+Źródło: https://www.gnu.org/licenses/gpl-3.0.txt

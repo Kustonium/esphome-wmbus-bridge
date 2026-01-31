@@ -1,0 +1,97 @@
+esphome:
+  name: esphome-web-5a16c4
+  friendly_name: UltimateReader
+  min_version: 2025.11.0
+  name_add_mac_suffix: false
+
+  project:
+    name: wmbus.UltimateReader
+    version: "5.0.1"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  framework:
+    type: esp-idf
+
+external_components:
+  - source: github://YOUR_GH_USER/esphome-components-ultimate-min@main
+    components: [wmbus_common, wmbus_radio]
+    refresh: 0d
+
+logger:
+  level: info
+  logs:
+    wmbus: info
+    wmbusmeters: info
+
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: none
+  ap:
+    ssid: "UltimateReader Fallback"
+    password: "12345678"
+
+mqtt:
+  broker: !secret mqtt_broker
+  username: !secret mqtt_user
+  password: !secret mqtt_password
+
+captive_portal:
+
+time:
+  - platform: homeassistant
+
+spi:
+  id: spi_lora
+  clk_pin: GPIO05
+  mosi_pin: GPIO06
+  miso_pin: GPIO03
+
+i2c:
+  id: i2c0
+  sda: GPIO18
+  scl: GPIO17
+  frequency: 400kHz
+  scan: true
+
+output:
+  - platform: gpio
+    id: status_led
+    pin: GPIO15
+
+wmbus_radio:
+  radio_type: SX1276
+  spi_id: spi_lora
+  cs_pin: GPIO07
+  reset_pin: GPIO08
+  irq_pin:
+    number: GPIO33
+    mode:
+      input: true
+      pullup: true
+
+  on_frame:
+    then:
+      - if:
+          condition:
+            lambda: |-
+              // drop short junk
+              return frame->size() >= 15;
+          then:
+            - mqtt.publish:
+                topic: "wmbus_bridge/telegram"
+                payload: !lambda |-
+                  return frame->as_hex();
+
+            # (opcjonalnie) RAW z radia do debugowania
+            # - mqtt.publish:
+            #     topic: "wmbus_bridge/telegram_raw"
+            #     payload: !lambda |-
+            #       return frame->as_hex_raw();
