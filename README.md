@@ -20,10 +20,9 @@ external_components:
     refresh: 0d
 ```
 
-Potem użyj jednego z przykładów w `examples/`.
 
 ## Przykłady
-- `examples/UltimateReader_strict.yaml` – filtr jak u Ciebie (`as_hex().size() >= 30`) + opcjonalny RAW
+- `examples/UltimateReader_strict.yaml`
 - `examples/UltimateReader_lite.yaml` – profil oszczędny (filtr `frame->size()`), logger WARN, bez API/time/captive_portal
 
 ## Atrybucja i licencja
