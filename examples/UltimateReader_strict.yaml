@@ -15,7 +15,7 @@ esp32:
     type: esp-idf
 
 external_components:
-  - source: github://YOUR_GH_USER/esphome-components-ultimate-min@main
+  - source: github://Kustonium/esphome-wmbus-bridge@main
     components: [wmbus_common, wmbus_radio]
     refresh: 0d
 

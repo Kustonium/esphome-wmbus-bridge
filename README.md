@@ -1,5 +1,6 @@
 # esphome-components-ultimate-min
 
+ESP tylko odbiera wM-Bus (T1/C1) i publikuje telegramy przez MQTT. Dekodowanie jest poza ESP.
 Minimalne komponenty do ESPHome:
 - **wmbus_radio** (SX1276) – odbiór wM-Bus i zwrot ramek do automations (`on_frame`)
 - **wmbus_common** – tylko minimum: LinkMode (T1/C1) + usuwanie DLL CRC (Format A/B)
@@ -31,3 +32,16 @@ W `external_components` podmień `YOUR_GH_USER` na własny user/repo.
 ## Przykłady
 - `examples/UltimateReader_strict.yaml` – dokładnie filtr jak w Twoim YAML (as_hex().size()) + opcjonalny RAW.
 - `examples/UltimateReader_lite.yaml` – profil oszczędny (frame->size()), logger WARN, bez API/time/captive_portal.
+
+## Użycie (ESPHome)
+
+W YAML dodaj:
+
+```yaml
+external_components:
+  - source: github://Kustonium/esphome-wmbus-bridge@main
+    components: [wmbus_common, wmbus_radio]
+    refresh: 0d
+```
+
+Potem użyj jednego z przykładów w `examples/`.
