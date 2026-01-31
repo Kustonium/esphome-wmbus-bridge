@@ -5,7 +5,7 @@ ESP tylko odbiera wM-Bus (T1/C1) i publikuje telegramy przez MQTT. Dekodowanie j
 ## Co to jest
 Minimalne komponenty do ESPHome:
 - **wmbus_radio** – odbiornik wM-Bus na **SX1276** (SPI) i trigger `on_frame`
-- **wmbus_common** – minimum do normalizacji ramek: LinkMode (T1/C1) + DLL CRC (Format A/B)
+- **wmbus_bridge_common** – minimum do normalizacji ramek: LinkMode (T1/C1) + DLL CRC (Format A/B)
 
 ## RAW vs NORM
 - `frame->as_hex()` = **NORM**: T1 po 3of6 decode, C1 po ucięciu 2B suffix, DLL CRC sprawdzone i zdjęte (A/B). Jeśli CRC nie pasuje → ramka jest odrzucana.
@@ -16,13 +16,15 @@ Minimalne komponenty do ESPHome:
 ```yaml
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
-    components: [wmbus_common, wmbus_radio]
+    components: [wmbus_bridge_common, wmbus_radio]
     refresh: 0d
 ```
 
+Potem użyj jednego z przykładów w `examples/`.
+
 ## Przykłady
-- `examples/UltimateReader_strict.yaml` – filtr `as_hex().size() >= 30` (wygodne, ale generuje HEX nawet dla śmieci).
-- `examples/UltimateReader_lite.yaml` – filtr `size() >= 15` (to samo logicznie: 30 znaków HEX = 15 bajtów, ale lżej dla słabszych ESP).
+- `examples/UltimateReader_strict.yaml` – filtr jak u Ciebie (`as_hex().size() >= 30`) + opcjonalny RAW
+- `examples/UltimateReader_lite.yaml` – profil oszczędny (filtr `frame->size()`), logger WARN, bez API/time/captive_portal
 
 ## Atrybucja i licencja
 Ten projekt jest pochodną prac:
