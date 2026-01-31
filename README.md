@@ -1,4 +1,4 @@
-# esphome-components-ultimate-min
+# Esphome-components-ultimate-min
 
 ESP tylko odbiera wM-Bus (T1/C1) i publikuje telegramy przez MQTT. Dekodowanie jest poza ESP.
 Minimalne komponenty do ESPHome:
