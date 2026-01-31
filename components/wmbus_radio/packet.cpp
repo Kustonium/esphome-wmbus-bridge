@@ -3,8 +3,8 @@
 #include <ctime>
 
 #include "decode3of6.h"
-#include "esphome/components/wmbus_common/dll_crc.h"
-#include "esphome/components/wmbus_common/link_mode.h"
+#include "esphome/components/wmbus_bridge_common/dll_crc.h"
+#include "esphome/components/wmbus_bridge_common/link_mode.h"
 
 #define WMBUS_PREAMBLE_SIZE (3)
 #define WMBUS_MODE_C_SUFIX_LEN (2)

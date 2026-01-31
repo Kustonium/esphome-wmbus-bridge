@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "esphome/core/helpers.h"
-#include "esphome/components/wmbus_common/link_mode.h"
+#include "esphome/components/wmbus_bridge_common/link_mode.h"
 
 namespace esphome {
 namespace wmbus_radio {
