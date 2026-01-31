@@ -18,19 +18,15 @@ external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
     components: [wmbus_common, wmbus_radio]
     refresh: 0d
+```
 
-Przykłady
+## Przykłady
+- `examples/UltimateReader_strict.yaml` – filtr `as_hex().size() >= 30` (wygodne, ale generuje HEX nawet dla śmieci).
+- `examples/UltimateReader_lite.yaml` – filtr `size() >= 15` (to samo logicznie: 30 znaków HEX = 15 bajtów, ale lżej dla słabszych ESP).
 
-examples/UltimateReader_strict.yaml
-
-examples/UltimateReader_lite.yaml – profil oszczędny (filtr frame->size()), logger WARN, bez API/time/captive_portal
-
-Atrybucja i licencja
-
+## Atrybucja i licencja
 Ten projekt jest pochodną prac:
+- SzczepanLeon/esphome-components (autor: Szczepan Leon)
+- wmbusmeters/wmbusmeters (GPL)
 
-SzczepanLeon/esphome-components (autor: Szczepan Leon)
-
-wmbusmeters/wmbusmeters (GPL)
-
-Licencja tego repo: GPL-3.0-or-later (szczegóły w LICENSE i NOTICE).
+Licencja tego repo: **GPL-3.0-or-later** (szczegóły w `LICENSE` i `NOTICE`).
