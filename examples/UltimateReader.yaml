@@ -22,9 +22,12 @@ external_components:
 logger:
   level: info
   logs:
-    wmbus: info
-    wmbusmeters: info
+    mqtt: warn
+    component: error
 
+mdns:
+  disabled: true
+  
 api:
 
 ota:
