@@ -3,6 +3,9 @@
 To jest *subset* repo Szczepana: tylko `wmbus_common` + `wmbus_radio`.
 Nie ma `wmbus_meter` (dekodowania) – ESP wysyła telegramy, dekoder jest poza ESP.
 
+## WYMAGANIA ##
+Płytka ESP z radiem SX1276 
+
 ## Użycie
 
 ```yaml
