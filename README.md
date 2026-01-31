@@ -28,7 +28,7 @@ Zobacz `examples/UltimateReader.yaml`.
 
 
 ## Przykłady
-- `examples/UltimateReader_strict.yaml` – dokładnie filtr jak w Twoim YAML (as_hex().size()) + opcjonalny RAW.
+- `examples/UltimateReader_strict.yaml` –  + opcjonalny RAW.
 - `examples/UltimateReader_lite.yaml` – profil oszczędny (frame->size()), logger WARN, bez API/time/captive_portal.
 
 ## Użycie (ESPHome)
