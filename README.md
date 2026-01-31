@@ -11,25 +11,10 @@ Minimalne komponenty do ESPHome:
 - `frame->as_hex()` = **NORM**: T1 po 3of6 decode, C1 po ucięciu 2B suffix, DLL CRC sprawdzone i zdjęte (A/B). Jeśli CRC nie pasuje → ramka jest odrzucana.
 - `frame->as_hex_raw()` = **RAW** bajty z radia (przed normalizacją).
 
-md
-
 ## Użycie (ESPHome)
-
 
 ```yaml
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
     components: [wmbus_common, wmbus_radio]
     refresh: 0d
-```
-```md
-## Przykłady
-- `examples/UltimateReader_strict.yaml`
-- `examples/UltimateReader_lite.yaml` – profil oszczędny (filtr `frame->size()`), logger WARN, bez API/time/captive_portal
-
-## Atrybucja i licencja
-Ten projekt jest pochodną prac:
-- SzczepanLeon/esphome-components (autor: Szczepan Leon)
-- wmbusmeters/wmbusmeters (GPL)
-
-Licencja tego repo: **GPL-3.0-or-later** (szczegóły w `LICENSE` i `NOTICE`).
