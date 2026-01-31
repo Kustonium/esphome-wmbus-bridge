@@ -1,34 +1,28 @@
 esphome:
   name: esphome-web-5a16c4
   friendly_name: UltimateReader
-  min_version: 2025.11.0
+  min_version: 2026.1.3
   name_add_mac_suffix: false
-
-  project:
-    name: wmbus.UltimateReader
-    version: "5.0.1"
 
 esp32:
   board: esp32-s3-devkitc-1
-  variant: esp32s3
   framework:
     type: esp-idf
 
 external_components:
   - source: github://Kustonium/esphome-wmbus-bridge@main
-    components: [wmbus_bridge_common, wmbus_radio]
-    refresh: 0d
+    components: [wmbus_common, wmbus_radio]
+    refresh: 0s
 
 logger:
-  level: info
+  level: info                  # Zmień na 'warn' jeśli chcesz ciszej w logach
   logs:
-    mqtt: warn
-    component: error
+    mqtt: warn                 # Ucisza MQTT (zostawia warningi)
+    component: error           # Ucisza ogólne gadanie ESPHome
+    # wmbus: info              # (opcjonalnie) wymuś logi wmbus, jeśli kiedyś znikną
 
 mdns:
-  disabled: true
-  
-api:
+  disabled: true               # Wyłączone mDNS = mniej usług/gniazd/szumu
 
 ota:
   - platform: esphome
@@ -36,39 +30,32 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  power_save_mode: none
-  ap:
-    ssid: "UltimateReader Fallback"
-    password: "12345678"
+  power_save_mode: none        # Stabilniej pod RF/MQTT (kosztem prądu)
 
 mqtt:
   broker: !secret mqtt_broker
   username: !secret mqtt_user
   password: !secret mqtt_password
-
-captive_portal:
-
-time:
-  - platform: homeassistant
+  # Uwaga: jeśli chcesz TYLKO MQTT, nie dodawaj 'api:' ani web_server.
 
 spi:
   id: spi_lora
   clk_pin: GPIO05
   mosi_pin: GPIO06
-  miso_pin: GPIO03
+  miso_pin: GPIO03             # Ostrzeżenie: strapping pin – u Ciebie działa, ale miej to z tyłu głowy
 
-i2c:
-  id: i2c0
-  sda: GPIO18
-  scl: GPIO17
-  frequency: 400kHz
-  scan: true
-
+# === LED (LilyGO T3-S3 v1.2) ===
+# Jeśli chcesz BEZ MIGANIA:
+# - usuń cały blok 'output:' poniżej
+# - oraz usuń/zakomentuj 3 linie output.turn_on/delay/output.turn_off w on_frame
 output:
   - platform: gpio
     id: status_led
-    pin: GPIO15
+    pin:
+      number: GPIO37           # On-board LED na T3-S3 v1.2
+      # inverted: true         # Odkomentuj, jeśli LED świeci "odwrotnie" (np. ciągle lub nie gaśnie)
 
+# === wM-Bus Radio ===
 wmbus_radio:
   radio_type: SX1276
   spi_id: spi_lora
@@ -85,16 +72,22 @@ wmbus_radio:
       - if:
           condition:
             lambda: |-
-              // drop short junk
-              return frame->size() >= 15;
+              // FILTR: to odrzuca krótkie śmieci.
+              // Opcja lżejsza (polecana): return frame->size() >= 15;
+              // (15 bajtów = 30 znaków hex)
+              return frame->as_hex().size() >= 30;
           then:
+            # === MIGANIE LED (usuń te 3 linie jeśli nie chcesz migania) ===
+            - output.turn_on: status_led
+            - delay: 50ms                 # skróć np. do 10ms jeśli miga za długo
+            - output.turn_off: status_led
+
+            # === MQTT: publikacja znormalizowanej ramki w HEX ===
             - mqtt.publish:
                 topic: "wmbus_bridge/telegram"
                 payload: !lambda |-
                   return frame->as_hex();
 
-            # (opcjonalnie) RAW z radia do debugowania
-            # - mqtt.publish:
-            #     topic: "wmbus_bridge/telegram_raw"
-            #     payload: !lambda |-
-            #       return frame->as_hex_raw();
+            # Jeśli chcesz RAW z radia zamiast NORM:
+            # payload: !lambda |-
+            #   return frame->as_hex_raw();
